@@ -13,7 +13,7 @@ public class Ship {
 	@JsonProperty private List<Square> occupiedSquares;
 	
 	public Ship(String kind) {
-		//Set the occupied squares of the ship based on its type
+		//Set the occupied squares of the ship based on its type.
 		if(kind.equals("Minesweeper")){
 			occupiedSquares = new ArrayList<>(2);
 		}else if(kind.equals("Destroyer")){
@@ -25,7 +25,7 @@ public class Ship {
 	}
 
 	public List<Square> getOccupiedSquares() {
-		//return the occupied squares of the ship
+		//return the occupied squares of the ship.
 		return occupiedSquares;
 	}
 }
