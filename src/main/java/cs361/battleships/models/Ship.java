@@ -32,23 +32,23 @@ public class Ship {
 		setHits(0);
 	}
 
-	public static int getLength(){
+	public int getLength(){
 		return this.length;
 	}
 	public void setLength(int aLength){
 		this.length = aLength;
 	}
-	public static int getType(){
+	public String getType(){
 		return this.type;
 	}
 	public void setType(String aString){
 		this.type = aString;
 	}
 
-	public static int getHits(){
+	public int getHits(){
 		return this.hits;
 	}
-	public void setHits(int aHits;){
+	public void setHits(int aHits){
 		this.hits = aHits;
 	}
 

@@ -35,7 +35,7 @@ public class Board {
 				// Sets squares to occupied
 				for(int i = 0; i < ship.getLength(); i++){
 					char occY = (char)(y+i);
-					ship.setOccupiedSquare(new Square(x,occY));
+					ship.setOccupiedSquares(new Square(x,occY));
 				}
 			}
 			// If horizontal, check to make sure it doesn't go off the board on the y-axis and then set the squares to occupied
@@ -47,7 +47,7 @@ public class Board {
 				// Sets squares to occupied
 				for(int i =0; i < ship.getLength(); i++){
 					char occY = (char)(y+i);
-					ship.setOccupiedSquare(new Square(x,occY));	
+					ship.setOccupiedSquares(new Square(x,occY));
 				}
 			}
 		}
@@ -81,7 +81,7 @@ public class Board {
 						for(Square square: ship.getOccupiedSquares()){
 							hit = true;
 							// If it has been sunk add one to the counter so we know when to surrender
-							if(ship.getHits() == ship.getLength -1){
+							if(ship.setHits() == ship.getLength() -1){
 								sunk += 1;
 								isSunk = true;
 							}
