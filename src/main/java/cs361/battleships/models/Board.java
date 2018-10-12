@@ -29,24 +29,24 @@ public class Board {
 			if(isVertical){ // If Vertical, check to make sure it doesn't go off the board on the x-axis and then set the squares to occupied
 				// Checks to make sure it doesn't go off the board
 				if((ship.getLength() - 1 + x) > 10){
-					return false
+					return false;
 				}
 				
 				// Sets squares to occupied
 				for(int i = 0; i < ship.getLength(); i++){
 					char occY = (char)(y+i);
-					ship.setOccupiedSquare(new Square(x,occY);
+					ship.setOccupiedSquare(new Square(x,occY));
 				}
 			}
 			// If horizontal, check to make sure it doesn't go off the board on the y-axis and then set the squares to occupied
 			else{
 				// Checks to make sure it isn't off the board
-				if(ship.getLength() -1 + y) > 75){
+				if((ship.getLength() -1 + y) > 75){
 					return false;
 				}
 				// Sets squares to occupied
 				for(int i =0; i < ship.getLength(); i++){
-					char occY = (char(y+i);
+					char occY = (char)(y+i);
 					ship.setOccupiedSquare(new Square(x,occY));	
 				}
 			}
@@ -54,6 +54,8 @@ public class Board {
 		else{
 			return false;
 		}
+		ships.add(ship);
+		return true;
 	}
 
 	/*
@@ -61,52 +63,64 @@ public class Board {
 	 */
 	public Result attack(int x, char y) {
 		Result result = new Result();
-
-		if (x > 0 && x < 10) && (y > 64 && y < 75){
-			
-			for(int i = 0; i < attacks.Length(); i++){
-				if attack[i].getLocation().getRow() == x && attack[i].getLocation().getCol() == y){
-					result.SetResult(AtackStatus.INVALID);	
+		// Checks to make sure it's in bounds
+		if ((x > 0 && x < 10) && (y > 64 && y < 75)){
+			// Loops through all attacks
+			for(Result attack: attacks){
+				// Checks if attack has already been done, if so then you can't shoot the same spot twice
+				if (attack.getLocation().getRow() == x && attack.getLocation().getColumn() == y){
+					result.setResult(AtackStatus.INVALID);
 				}
 				else{
 					int sunk = 0;
-					bool isSunk;
-					bool hit = false;
+					boolean isSunk = false;
+					boolean hit = false;
+					// Loops through all ships
 					for(Ship ship: ships){
+						// Loops through all occupied squares of each ship
 						for(Square square: ship.getOccupiedSquares()){
 							hit = true;
+							// If it has been sunk add one to the counter so we know when to surrender
 							if(ship.getHits() == ship.getLength -1){
 								sunk += 1;
 								isSunk = true;
 							}
-							if((square.getRow() == x) && (sqaure.getColumn() == y){
-								if(sunk == 3){
+							// If hit
+							if((square.getRow() == x) && (square.getColumn() == y)){
+								// If this is the final ship sunk, surrender
+								if (sunk == 3) {
 									result.setResult(AtackStatus.SURRENDER);
 								}
-								if(isSunk == false){
+								// If not sunk then it's just a plain hit
+								if (isSunk == false) {
 									result.setResult(AtackStatus.HIT);
-								}
-								else{
+								} 
+								// Otherwise it's sunk
+								else {
+									
 									result.setResult(AtackStatus.SUNK);
 								}
-								
+
 								result.setShip(ship);
-							{
+							}
 						}
 					}
+					// If not hit,mark miss
 					if(hit != true){
-						result.setResult(AtackStatus.Miss);
-						result.SetLocation(new Square(x,y);
+						result.setResult(AtackStatus.MISS);
+						result.setLocation(new Square(x,y));
 					}
 				}
 			}
 		}
+		
+		// If out of bounds
 		else{
 			result.setResult(AtackStatus.INVALID);
 		}
-
+		// If it was an invalid shot, then don't add it. If valid, add it to attacks.
 		if(result.getResult() != AtackStatus.INVALID){
-			attackList.add(result);
+			attacks.add(result);
 		}
 		return result;
 	}
