@@ -37,7 +37,7 @@ public class Board {
 					char occY = (char)(y+i);
 					List<Square> currSquares = new ArrayList();
 					currSquares = ship.getOccupiedSquares();
-					currSquares.add(new Square(x,occY);
+					currSquares.add(new Square(x,occY));
 					ship.setOccupiedSquares(currSquares);
 				}
 			}
@@ -52,8 +52,8 @@ public class Board {
 					char occY = (char)(y+i);
 					List<Square> currSquares = new ArrayList();
 					currSquares = ship.getOccupiedSquares();
-					currSquares.add(new Square(x,occY);
-					ship.getOccupiedSquares(currSquares);
+					currSquares.add(new Square(x,occY));
+					ship.setOccupiedSquares(currSquares);
 				}
 			}
 		}
