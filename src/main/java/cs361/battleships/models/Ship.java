@@ -20,14 +20,16 @@ public class Ship {
 		//Set the occupied squares of the ship based on its type.
 		if(kind.equals("MINESWEEPER")){
 			occupiedSquares = new ArrayList<>(2);
-
+			setLength(2);
 		}else if(kind.equals("DESTROYER")){
 			occupiedSquares = new ArrayList<>(3);
-
+			setLength(3);
 		}else if(kind.equals("BATTLESHIP")){
 			occupiedSquares = new ArrayList<>(4);
-
+			setLength(4);
 		}
+		setType(kind);
+		setHits(0);
 	}
 
 	public static int getLength(){
@@ -36,7 +38,6 @@ public class Ship {
 	public void setLength(int aLength){
 		this.length = aLength;
 	}
-
 	public static int getType(){
 		return this.type;
 	}
@@ -54,5 +55,8 @@ public class Ship {
 	public List<Square> getOccupiedSquares() {
 		//return the occupied squares of the ship.
 		return occupiedSquares;
+	}
+	public void setOccupiedSquares(ArrayList<Square> occupiedSquares){
+		 this.occupiedSquares = occupiedSquares;
 	}
 }
