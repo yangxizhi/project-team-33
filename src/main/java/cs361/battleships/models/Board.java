@@ -87,7 +87,7 @@ public class Board {
 						for(Square square: ship.getOccupiedSquares()){
 							hit = true;
 							// If it has been sunk add one to the counter so we know when to surrender
-							if(ship.setHits() == ship.getLength() -1){
+							if(ship.getHits() == ship.getLength() -1){
 								sunk += 1;
 								isSunk = true;
 							}
