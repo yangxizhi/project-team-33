@@ -60,7 +60,8 @@ public class Board {
 	DO NOT change the signature of this method. It is used by the grading scripts.
 	 */
 	public Result attack(int x, char y) {
-		
+		Result result = new Result();
+
 		if (x > 0 && x < 10) && (y > 64 && y < 75){
 			
 			for(int i = 0; i < attacks.Length(); i++){
@@ -68,10 +69,46 @@ public class Board {
 					result.SetResult(AtackStatus.INVALID);	
 				}
 				else{
-					
+					int sunk = 0;
+					bool isSunk;
+					bool hit = false;
+					for(Ship ship: ships){
+						for(Square square: ship.getOccupiedSquares()){
+							hit = true;
+							if(ship.getHits() == ship.getLength -1){
+								sunk += 1;
+								isSunk = true;
+							}
+							if((square.getRow() == x) && (sqaure.getColumn() == y){
+								if(sunk == 3){
+									result.setResult(AtackStatus.SURRENDER);
+								}
+								if(isSunk == false){
+									result.setResult(AtackStatus.HIT);
+								}
+								else{
+									result.setResult(AtackStatus.SUNK);
+								}
+								
+								result.setShip(ship);
+							{
+						}
+					}
+					if(hit != true){
+						result.setResult(AtackStatus.Miss);
+						result.SetLocation(new Square(x,y);
+					}
 				}
 			}
 		}
+		else{
+			result.setResult(AtackStatus.INVALID);
+		}
+
+		if(result.getResult() != AtackStatus.INVALID){
+			attackList.add(result);
+		}
+		return result;
 	}
 
 	public List<Ship> getShips() {
