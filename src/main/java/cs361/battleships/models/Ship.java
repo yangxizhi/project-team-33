@@ -56,7 +56,7 @@ public class Ship {
 		//return the occupied squares of the ship.
 		return occupiedSquares;
 	}
-	public void setOccupiedSquares(ArrayList<Square> occupiedSquares){
+	public void setOccupiedSquares(List<Square> occupiedSquares){
 		 this.occupiedSquares = occupiedSquares;
 	}
 }

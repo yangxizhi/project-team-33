@@ -35,7 +35,10 @@ public class Board {
 				// Sets squares to occupied
 				for(int i = 0; i < ship.getLength(); i++){
 					char occY = (char)(y+i);
-					ship.setOccupiedSquares(new Square(x,occY));
+					List<Square> currSquares = new ArrayList();
+					currSquares = ship.getOccupiedSquares();
+					currSquares.add(new Square(x,occY);
+					ship.setOccupiedSquares(currSquares);
 				}
 			}
 			// If horizontal, check to make sure it doesn't go off the board on the y-axis and then set the squares to occupied
@@ -47,7 +50,10 @@ public class Board {
 				// Sets squares to occupied
 				for(int i =0; i < ship.getLength(); i++){
 					char occY = (char)(y+i);
-					ship.setOccupiedSquares(new Square(x,occY));
+					List<Square> currSquares = new ArrayList();
+					currSquares = ship.getOccupiedSquares();
+					currSquares.add(new Square(x,occY);
+					ship.getOccupiedSquares(currSquares);
 				}
 			}
 		}
