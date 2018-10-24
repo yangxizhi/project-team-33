@@ -1,62 +1,117 @@
 package cs361.battleships.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.common.collect.Sets;
+import com.mchange.v1.util.CollectionUtils;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 public class Ship {
+
+	@JsonProperty private String kind;
+	@JsonProperty private List<Square> occupiedSquares;
+	@JsonProperty private int size;
+
 	public Ship() {
 		occupiedSquares = new ArrayList<>();
 	}
-
-	private int length; // length of ship
-	private String type; // type of ship
-	private int hits; // num of hits
-
-	@JsonProperty private List<Square> occupiedSquares;
-
+	
 	public Ship(String kind) {
-		//Set the occupied squares of the ship based on its type.
-		if(kind.equals("MINESWEEPER")){
-			occupiedSquares = new ArrayList<>(2);
-			setLength(2);
-		}else if(kind.equals("DESTROYER")){
-			occupiedSquares = new ArrayList<>(3);
-			setLength(3);
-		}else if(kind.equals("BATTLESHIP")){
-			occupiedSquares = new ArrayList<>(4);
-			setLength(4);
+		this();
+		this.kind = kind;
+		switch(kind) {
+			case "MINESWEEPER":
+				size = 2;
+				break;
+			case "DESTROYER":
+				size = 3;
+				break;
+			case "BATTLESHIP":
+				size = 4;
+				break;
 		}
-		setType(kind);
-		setHits(0);
-	}
-
-	public int getLength(){
-		return this.length;
-	}
-	public void setLength(int aLength){
-		this.length = aLength;
-	}
-	public String getType(){
-		return this.type;
-	}
-	public void setType(String aString){
-		this.type = aString;
-	}
-
-	public int getHits(){
-		return this.hits;
-	}
-	public void setHits(int aHits){
-		this.hits = aHits;
 	}
 
 	public List<Square> getOccupiedSquares() {
-		//return the occupied squares of the ship.
 		return occupiedSquares;
 	}
-	public void setOccupiedSquares(List<Square> occupiedSquares){
-		this.occupiedSquares = occupiedSquares;
+
+	public void place(char col, int row, boolean isVertical) {
+		for (int i=0; i<size; i++) {
+			if (isVertical) {
+				occupiedSquares.add(new Square(row+i, col));
+			} else {
+				occupiedSquares.add(new Square(row, (char) (col + i)));
+			}
+		}
+	}
+
+	public boolean overlaps(Ship other) {
+		Set<Square> thisSquares = Set.copyOf(getOccupiedSquares());
+		Set<Square> otherSquares = Set.copyOf(other.getOccupiedSquares());
+		Sets.SetView<Square> intersection = Sets.intersection(thisSquares, otherSquares);
+		return intersection.size() != 0;
+	}
+
+	public boolean isAtLocation(Square location) {
+		return getOccupiedSquares().stream().anyMatch(s -> s.equals(location));
+	}
+
+	public String getKind() {
+		return kind;
+	}
+
+	public Result attack(int x, char y) {
+		var attackedLocation = new Square(x, y);
+		var square = getOccupiedSquares().stream().filter(s -> s.equals(attackedLocation)).findFirst();
+		if (!square.isPresent()) {
+			return new Result(attackedLocation);
+		}
+		var attackedSquare = square.get();
+		if (attackedSquare.isHit()) {
+			var result = new Result(attackedLocation);
+			result.setResult(AtackStatus.INVALID);
+			return result;
+		}
+		attackedSquare.hit();
+		var result = new Result(attackedLocation);
+		result.setShip(this);
+		if (isSunk()) {
+			result.setResult(AtackStatus.SUNK);
+		} else {
+			result.setResult(AtackStatus.HIT);
+		}
+		return result;
+	}
+
+	@JsonIgnore
+	public boolean isSunk() {
+		return getOccupiedSquares().stream().allMatch(s -> s.isHit());
+	}
+
+	@Override
+	public boolean equals(Object other) {
+		if (!(other instanceof Ship)) {
+			return false;
+		}
+		var otherShip = (Ship) other;
+
+		return this.kind.equals(otherShip.kind)
+				&& this.size == otherShip.size
+				&& this.occupiedSquares.equals(otherShip.occupiedSquares);
+	}
+
+	@Override
+	public int hashCode() {
+		return 33 * kind.hashCode() + 23 * size + 17 * occupiedSquares.hashCode();
+	}
+
+	@Override
+	public String toString() {
+		return kind + occupiedSquares.toString();
 	}
 }
